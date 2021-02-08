@@ -1,0 +1,32 @@
+{
+  "name": "projects-dashboard-api",
+  "version": "0.0.1",
+  "description": "Projects dashboard API",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "cs": "prettier --write .",
+    "typeorm": "ts-node ./node_modules/.bin/typeorm --config src/config/database/mysql/config.ts",
+    "migration:generate": "npm run typeorm migration:generate -- -n",
+    "migration:create": "npm run typeorm migration:create -- -n"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run cs"
+    }
+  },
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.15.4",
+    "mysql": "^2.14.1",
+    "reflect-metadata": "^0.1.10",
+    "typeorm": "0.2.30"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.29",
+    "husky": "^4.3.8",
+    "prettier": "^2.2.1",
+    "ts-node": "3.3.0",
+    "typescript": "3.3.3333"
+  }
+}
