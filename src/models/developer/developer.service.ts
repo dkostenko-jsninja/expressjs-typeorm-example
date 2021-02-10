@@ -18,4 +18,9 @@ export class DeveloperService {
 
     return await this.developerRepository.createEntity(next, entity);
   }
+
+  async getAll(next): Promise<{developers: DeveloperSerializer[]}> {
+    const developers = await this.developerRepository.getAll(next);
+    return { developers };
+  }
 }

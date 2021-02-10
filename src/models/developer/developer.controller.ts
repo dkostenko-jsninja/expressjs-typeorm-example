@@ -8,4 +8,8 @@ export class DeveloperController {
   async create(request: Request, response: Response, next: NextFunction) {
     return await this.developerService.create(next, request.body);
   }
+
+  async getAll(request: Request, response: Response, next: NextFunction) {
+    return await this.developerService.getAll(next);
+  }
 }

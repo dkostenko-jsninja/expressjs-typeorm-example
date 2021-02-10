@@ -9,4 +9,11 @@ export const DeveloperRoutes = [
     action: "create",
     validator: DeveloperDTO,
   },
+  {
+    method: "get",
+    route: "/developers",
+    controller: DeveloperController,
+    action: "getAll",
+    validator: null
+  }
 ];
