@@ -11,6 +11,8 @@ dotenv.config();
 import mysqlConfig from "./config/database/mysql/config";
 import appConfig from "./config/app/config";
 
+import { validateBody, validationError } from "./validate";
+
 createConnection(mysqlConfig)
   .then(async () => {
     const app = express();
@@ -18,7 +20,7 @@ createConnection(mysqlConfig)
 
     // register express routes from defined application routes
     Routes.forEach((route) => {
-      (app as any)[route.method](
+      const args = [
         route.route,
         (req: Request, res: Response, next: Function) => {
           const result = new (route.controller as any)()[route.action](
@@ -35,8 +37,25 @@ createConnection(mysqlConfig)
           } else if (result !== null && result !== undefined) {
             res.json(result);
           }
-        }
-      );
+        },
+      ];
+
+      if (route.validator) {
+        args.splice(1, 0, validateBody(route.validator));
+      }
+
+      (app as any)[route.method](...args);
+    });
+
+    app.use(validationError);
+
+    app.use((error, req, res, next) => {
+      const errorStatus = error.status || 500;
+      res.status(errorStatus);
+      res.json({
+        status: errorStatus,
+        message: errorStatus === 500 ? "Internal server error" : error.message,
+      });
     });
 
     app.listen(appConfig.port);
