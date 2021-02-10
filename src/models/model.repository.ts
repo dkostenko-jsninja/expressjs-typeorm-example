@@ -28,9 +28,7 @@ export class ModelRepository<T, K extends ModelSerializer> {
       .findOne({ where: findOptions, relations })
       .then((entity) => {
         if (!entity && throwsException) {
-          return next(
-            new createHttpError.NotFound(`${this.modelName} was not found.`)
-          );
+          return next(new createHttpError.NotFound(`${this.modelName} was not found.`));
         }
 
         if (withoutTransform) {
@@ -75,10 +73,7 @@ export class ModelRepository<T, K extends ModelSerializer> {
       .catch(next);
   }
 
-  async deleteEntity(
-    next,
-    options: { [key: string]: any }
-  ): Promise<SuccessResponse> {
+  async deleteEntity(next, options: { [key: string]: any }): Promise<SuccessResponse> {
     const entity = await this.get(next, options, [], true, true);
 
     return this.repository
