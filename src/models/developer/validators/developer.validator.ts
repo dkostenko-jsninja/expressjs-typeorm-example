@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUrl, Matches } from "class-validator";
 
 import { DeveloperLevels, EmployeeStatus } from "../interfaces/developer.interface";
 
@@ -19,16 +19,20 @@ export class DeveloperDTO {
   lastName: string;
 
   @IsOptional()
-  @IsString()
+  @IsUrl()
   photo: string;
 
   @IsOptional()
   @IsString()
-  @Matches(new RegExp(DeveloperLevels.JUNIOR + "|" + DeveloperLevels.SENIOR))
+  @Matches(new RegExp(`^(${DeveloperLevels.JUNIOR}|${DeveloperLevels.SENIOR})$`), {
+    message: `level must be \"${DeveloperLevels.JUNIOR}\" or \"${DeveloperLevels.SENIOR}\"`,
+  })
   level: string;
 
   @IsOptional()
   @IsString()
-  @Matches(new RegExp(EmployeeStatus.ACTIVE + "|" + EmployeeStatus.INACTIVE))
+  @Matches(new RegExp(`^(${EmployeeStatus.ACTIVE}|${EmployeeStatus.INACTIVE})$`), {
+    message: `employeeStatus must be \"${EmployeeStatus.ACTIVE}\" or \"${EmployeeStatus.INACTIVE}\"`,
+  })
   employeeStatus: string;
 }
