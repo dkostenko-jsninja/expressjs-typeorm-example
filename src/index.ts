@@ -21,7 +21,7 @@ createConnection(mysqlConfig)
     // register express routes from defined application routes
     Routes.forEach((route) => {
       const args = [
-        route.route,
+        "/api" + route.route,
         (req: Request, res: Response, next: Function) => {
           const result = new (route.controller as any)()[route.action](req, res, next);
           if (result instanceof Promise) {
