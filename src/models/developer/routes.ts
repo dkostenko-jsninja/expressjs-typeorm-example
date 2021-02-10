@@ -14,6 +14,13 @@ export const DeveloperRoutes = [
     route: "/developers",
     controller: DeveloperController,
     action: "getAll",
-    validator: null
-  }
+    validator: null,
+  },
+  {
+    method: "put",
+    route: "/developer/:uuid",
+    controller: DeveloperController,
+    action: "edit",
+    validator: DeveloperDTO,
+  },
 ];

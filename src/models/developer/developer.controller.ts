@@ -12,4 +12,8 @@ export class DeveloperController {
   async getAll(request: Request, response: Response, next: NextFunction) {
     return await this.developerService.getAll(next);
   }
+
+  async edit(request: Request, response: Response, next: NextFunction) {
+    return await this.developerService.edit(next, request.params.uuid, request.body);
+  }
 }
