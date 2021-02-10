@@ -16,4 +16,8 @@ export class DeveloperController {
   async edit(request: Request, response: Response, next: NextFunction) {
     return await this.developerService.edit(next, request.params.uuid, request.body);
   }
+
+  async delete(request: Request, response: Response, next: NextFunction) {
+    return await this.developerService.delete(next, request.params.uuid);
+  }
 }

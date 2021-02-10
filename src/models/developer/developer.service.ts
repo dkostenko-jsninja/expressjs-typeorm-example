@@ -29,4 +29,8 @@ export class DeveloperService {
   async edit(next, uuid: string, developer: DeveloperDTO): Promise<SuccessResponse> {
     return await this.developerRepository.updateEntity(next, { uuid }, developer);
   }
+
+  async delete(next, uuid: string): Promise<SuccessResponse> {
+    return await this.developerRepository.deleteEntity(next, { uuid });
+  }
 }

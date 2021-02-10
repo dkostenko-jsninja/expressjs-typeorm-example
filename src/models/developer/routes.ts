@@ -23,4 +23,11 @@ export const DeveloperRoutes = [
     action: "edit",
     validator: DeveloperDTO,
   },
+  {
+    method: "delete",
+    route: "/developer/:uuid",
+    controller: DeveloperController,
+    action: "delete",
+    validator: null,
+  },
 ];
