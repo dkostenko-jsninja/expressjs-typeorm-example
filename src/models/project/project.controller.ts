@@ -33,4 +33,12 @@ export class ProjectController {
       request.params.featureUuid
     );
   }
+
+  async deleteFeature(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.deleteFeature(
+      next,
+      request.params.uuid,
+      request.params.featureUuid
+    );
+  }
 }

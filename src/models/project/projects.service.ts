@@ -87,7 +87,7 @@ export class ProjectsService {
       return;
     }
 
-    if (!project.features.find(projectFeature => projectFeature.uuid === featureUuid)) {
+    if (!project.features.find((projectFeature) => projectFeature.uuid === featureUuid)) {
       return next(new createHttpError.NotFound("Feature was not found."));
     }
 
@@ -99,5 +99,14 @@ export class ProjectsService {
     }
 
     return await this.featureRepository.updateEntity(next, { uuid: featureUuid }, feature);
+  }
+
+  async deleteFeature(next, uuid: string, featureUuid: string): Promise<SuccessResponse> {
+    const project = await this.projectRepository.get(next, { uuid }, [], true);
+    if (!project) {
+      return;
+    }
+
+    return await this.featureRepository.deleteEntity(next, { uuid: featureUuid });
   }
 }
