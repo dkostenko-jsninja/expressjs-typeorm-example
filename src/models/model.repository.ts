@@ -53,6 +53,10 @@ export class ModelRepository<T, K extends ModelSerializer> {
       .catch(next);
   }
 
+  create(entity: DeepPartial<T>): T {
+    return this.repository.create(entity);
+  }
+
   async createEntity(next, entity: DeepPartial<T>): Promise<K | T> {
     return this.repository
       .save(entity)

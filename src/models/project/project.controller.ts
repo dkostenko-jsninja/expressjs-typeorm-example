@@ -20,4 +20,8 @@ export class ProjectController {
   async delete(request: Request, response: Response, next: NextFunction) {
     return await this.projectService.delete(next, request.params.uuid);
   }
+
+  async createFeature(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.createFeature(next, request.params.uuid, request.body);
+  }
 }

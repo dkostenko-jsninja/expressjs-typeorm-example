@@ -3,17 +3,17 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 
-import { IProject } from "../interfaces/project.interface";
+import { IFeature } from "../interfaces/feature.interface";
 
-import { Feature } from "./feature.entity";
+import { Project } from "./project.entity";
 
-@Entity({ name: "project" })
-export class Project implements IProject {
+@Entity({ name: "feature" })
+export class Feature implements IFeature {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -27,11 +27,14 @@ export class Project implements IProject {
   @Column({ type: "longtext" })
   description: string;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   expirationDate: string;
 
-  @OneToMany((type) => Feature, (feature) => feature.project)
-  features: Feature[];
+  @Column({ type: "varchar", length: 36, nullable: true, default: null })
+  developerUuid: string;
+
+  @ManyToOne((type) => Project, (project) => project.features, { onDelete: "CASCADE" })
+  project: Project;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;

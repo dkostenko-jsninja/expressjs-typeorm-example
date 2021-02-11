@@ -1,5 +1,9 @@
+import { classToPlain, Exclude, plainToClass, Transform } from "class-transformer";
+
 import { Project } from "../entities/project.entity";
-import { Exclude } from "class-transformer";
+import { Feature } from "../entities/feature.entity";
+
+import { FeatureSerializer } from "./feature.serializer";
 
 export class ProjectSerializer implements Project {
   @Exclude()
@@ -12,6 +16,11 @@ export class ProjectSerializer implements Project {
   description: string;
 
   expirationDate: string;
+
+  @Transform((features) => {
+    return features.value.map((feature) => plainToClass(FeatureSerializer, classToPlain(feature)));
+  })
+  features: Feature[];
 
   @Exclude()
   createdAt: Date;
