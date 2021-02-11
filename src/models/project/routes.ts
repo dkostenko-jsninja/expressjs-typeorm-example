@@ -16,4 +16,11 @@ export const ProjectRouter = [
     action: "getAll",
     validator: null,
   },
+  {
+    method: "put",
+    route: "/project/:uuid",
+    controller: ProjectController,
+    action: "update",
+    validator: ProjectDTO,
+  },
 ];

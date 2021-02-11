@@ -12,4 +12,8 @@ export class ProjectController {
   async getAll(request: Request, response: Response, next: NextFunction) {
     return await this.projectService.getAll(next);
   }
+
+  async update(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.update(next, request.params.uuid, request.body);
+  }
 }
