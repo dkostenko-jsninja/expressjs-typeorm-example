@@ -10,15 +10,17 @@ import { DeveloperSerializer } from "./serializers/developer.serializer";
 export class DeveloperService {
   private developerRepository = new DeveloperRepository(Developer);
 
-  async create(next, entity: DeveloperDTO): Promise<DeveloperSerializer> {
-    const developerFromDB = await this.developerRepository.get(next, { email: entity.email });
+  async create(next, developer: DeveloperDTO): Promise<{ developer: DeveloperSerializer }> {
+    const developerFromDB = await this.developerRepository.get(next, { email: developer.email });
     if (developerFromDB) {
       return next(
         new createHttpError.BadRequest(`Developer with this email address already exists.`)
       );
     }
 
-    return await this.developerRepository.createEntity(next, entity);
+    const newDeveloper = await this.developerRepository.createEntity(next, developer);
+
+    return { developer: newDeveloper };
   }
 
   async getAll(next): Promise<{ developers: DeveloperSerializer[] }> {

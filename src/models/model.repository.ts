@@ -66,6 +66,9 @@ export class ModelRepository<T, K extends ModelSerializer> {
     inputs: QueryDeepPartialEntity<T>
   ): Promise<SuccessResponse> {
     const entity = await this.get(next, options, [], true, true);
+    if (!entity) {
+      return;
+    }
 
     return this.repository
       .update(this.repository.getId(<T>entity), inputs)
@@ -75,6 +78,9 @@ export class ModelRepository<T, K extends ModelSerializer> {
 
   async deleteEntity(next, options: { [key: string]: any }): Promise<SuccessResponse> {
     const entity = await this.get(next, options, [], true, true);
+    if (!entity) {
+      return;
+    }
 
     return this.repository
       .delete(this.repository.getId(<T>entity))
