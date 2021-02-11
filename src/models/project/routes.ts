@@ -38,4 +38,11 @@ export const ProjectRouter = [
     action: "createFeature",
     validator: FeatureDTO,
   },
+  {
+    method: "put",
+    route: "/project/:uuid/feature/:featureUuid",
+    controller: ProjectController,
+    action: "updateFeature",
+    validator: FeatureDTO,
+  },
 ];

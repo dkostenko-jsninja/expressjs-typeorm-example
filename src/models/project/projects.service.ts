@@ -75,4 +75,29 @@ export class ProjectsService {
 
     return { feature: newFeature };
   }
+
+  async updateFeature(
+    next,
+    uuid: string,
+    feature: FeatureDTO,
+    featureUuid: string
+  ): Promise<SuccessResponse> {
+    const project = await this.projectRepository.get(next, { uuid }, ["features"], true);
+    if (!project) {
+      return;
+    }
+
+    if (!project.features.find(projectFeature => projectFeature.uuid === featureUuid)) {
+      return next(new createHttpError.NotFound("Feature was not found."));
+    }
+
+    const availableFeature = project.features.find((projectFeature) => {
+      return projectFeature.name === feature.name && projectFeature.uuid !== featureUuid;
+    });
+    if (availableFeature) {
+      return next(new createHttpError.BadRequest("Feature with this name already exists."));
+    }
+
+    return await this.featureRepository.updateEntity(next, { uuid: featureUuid }, feature);
+  }
 }

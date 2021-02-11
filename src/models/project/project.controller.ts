@@ -24,4 +24,13 @@ export class ProjectController {
   async createFeature(request: Request, response: Response, next: NextFunction) {
     return await this.projectService.createFeature(next, request.params.uuid, request.body);
   }
+
+  async updateFeature(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.updateFeature(
+      next,
+      request.params.uuid,
+      request.body,
+      request.params.featureUuid
+    );
+  }
 }
