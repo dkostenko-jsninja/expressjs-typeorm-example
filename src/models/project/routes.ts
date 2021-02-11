@@ -23,4 +23,11 @@ export const ProjectRouter = [
     action: "update",
     validator: ProjectDTO,
   },
+  {
+    method: "delete",
+    route: "/project/:uuid",
+    controller: ProjectController,
+    action: "delete",
+    validator: null,
+  },
 ];

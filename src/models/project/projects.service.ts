@@ -43,4 +43,8 @@ export class ProjectsService {
 
     return await this.projectRepository.updateEntity(next, { uuid }, project);
   }
+
+  async delete(next, uuid: string): Promise<SuccessResponse> {
+    return await this.projectRepository.deleteEntity(next, { uuid });
+  }
 }
