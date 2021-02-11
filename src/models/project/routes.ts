@@ -9,4 +9,11 @@ export const ProjectRouter = [
     action: "create",
     validator: ProjectDTO,
   },
+  {
+    method: "get",
+    route: "/projects",
+    controller: ProjectController,
+    action: "getAll",
+    validator: null,
+  },
 ];

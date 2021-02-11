@@ -25,4 +25,9 @@ export class ProjectsService {
 
     return { project: newProject };
   }
+
+  async getAll(next): Promise<{ projects: ProjectSerializer[] }> {
+    const projects = await this.projectRepository.getAll(next);
+    return { projects };
+  }
 }

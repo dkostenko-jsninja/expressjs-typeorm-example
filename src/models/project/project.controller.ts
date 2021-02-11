@@ -8,4 +8,8 @@ export class ProjectController {
   async create(req: Request, res: Response, next: NextFunction) {
     return await this.projectService.create(next, req.body);
   }
+
+  async getAll(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.getAll(next);
+  }
 }
