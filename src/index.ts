@@ -45,6 +45,11 @@ createConnection(mysqlConfig)
 
     app.use((error, req, res, next) => {
       const errorStatus = error.status || 500;
+
+      if (errorStatus === 500) {
+        console.error(error);
+      }
+
       res.status(errorStatus);
       res.json({
         status: errorStatus,

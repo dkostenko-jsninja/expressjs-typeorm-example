@@ -3,8 +3,8 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import { plainToClass } from "class-transformer";
 import * as createHttpError from "http-errors";
 
-import { successResponse } from "../constants/success-response";
-import { SuccessResponse } from "../types/common-types";
+import { successResponse } from "../common/constants/success-response";
+import { SuccessResponse } from "../common/types/common-types";
 
 import { ModelSerializer } from "./model.serializer";
 
@@ -53,10 +53,21 @@ export class ModelRepository<T, K extends ModelSerializer> {
       .catch(next);
   }
 
+  create(entity: DeepPartial<T>): T {
+    return this.repository.create(entity);
+  }
+
   async createEntity(next, entity: DeepPartial<T>): Promise<K | T> {
     return this.repository
       .save(entity)
       .then(async (entity: any) => await this.get(next, { id: entity.id }))
+      .catch(next);
+  }
+
+  async saveEntity(next, entity: DeepPartial<T>): Promise<SuccessResponse> {
+    return this.repository
+      .save(entity)
+      .then(() => successResponse)
       .catch(next);
   }
 
@@ -66,6 +77,9 @@ export class ModelRepository<T, K extends ModelSerializer> {
     inputs: QueryDeepPartialEntity<T>
   ): Promise<SuccessResponse> {
     const entity = await this.get(next, options, [], true, true);
+    if (!entity) {
+      return;
+    }
 
     return this.repository
       .update(this.repository.getId(<T>entity), inputs)
@@ -75,6 +89,9 @@ export class ModelRepository<T, K extends ModelSerializer> {
 
   async deleteEntity(next, options: { [key: string]: any }): Promise<SuccessResponse> {
     const entity = await this.get(next, options, [], true, true);
+    if (!entity) {
+      return;
+    }
 
     return this.repository
       .delete(this.repository.getId(<T>entity))
