@@ -11,7 +11,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run cs"
+      "pre-commit": "lint-staged"
     }
   },
   "dependencies": {
@@ -28,8 +28,12 @@
     "@types/http-errors": "^1.8.0",
     "@types/node": "^8.0.29",
     "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
     "prettier": "^2.2.1",
     "ts-node": "3.3.0",
     "typescript": "3.3.3333"
+  },
+  "lint-staged": {
+    "*": "prettier --write"
   }
 }
