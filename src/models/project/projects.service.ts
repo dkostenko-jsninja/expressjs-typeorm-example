@@ -1,7 +1,7 @@
 import * as createHttpError from "http-errors";
 
-import { SuccessResponse } from "../../types/common-types";
-import { successResponse } from "../../constants/success-response";
+import { SuccessResponse } from "../../common/types/common-types";
+import { successResponse } from "../../common/constants/success-response";
 
 import { CustomDate } from "../custom-date";
 

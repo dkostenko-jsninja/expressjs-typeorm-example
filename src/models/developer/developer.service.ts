@@ -1,6 +1,6 @@
 import * as createHttpError from "http-errors";
 
-import { SuccessResponse } from "../../types/common-types";
+import { SuccessResponse } from "../../common/types/common-types";
 
 import { ProjectsService } from "../project/projects.service";
 

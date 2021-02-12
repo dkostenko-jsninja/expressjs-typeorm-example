@@ -3,8 +3,8 @@ import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity
 import { plainToClass } from "class-transformer";
 import * as createHttpError from "http-errors";
 
-import { successResponse } from "../constants/success-response";
-import { SuccessResponse } from "../types/common-types";
+import { successResponse } from "../common/constants/success-response";
+import { SuccessResponse } from "../common/types/common-types";
 
 import { ModelSerializer } from "./model.serializer";
 
