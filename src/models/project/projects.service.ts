@@ -182,4 +182,23 @@ export class ProjectsService {
 
     return successResponse;
   }
+
+  async unassignDeveloper(next, uuid: string, developerUuid: string): Promise<SuccessResponse> {
+    const project = await this.projectRepository.get(next, { uuid }, [], true, true);
+    const developer = await this.developerRepository.get(
+      next,
+      { uuid: developerUuid },
+      [],
+      true,
+      true
+    );
+
+    if (!project || !developer) {
+      return;
+    }
+
+    await this.developerProjectRepository.deleteEntity(next, { developer, project });
+
+    return successResponse;
+  }
 }

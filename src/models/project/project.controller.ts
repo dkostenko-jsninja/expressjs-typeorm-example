@@ -45,4 +45,12 @@ export class ProjectController {
   async assignDeveloper(request: Request, response: Response, next: NextFunction) {
     return await this.projectService.assignDeveloper(next, request.params.uuid, request.body);
   }
+
+  async unassignDeveloper(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.unassignDeveloper(
+      next,
+      request.params.uuid,
+      request.params.developerUuid
+    );
+  }
 }

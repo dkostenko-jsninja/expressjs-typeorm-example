@@ -60,4 +60,11 @@ export const ProjectRouter = [
     action: "assignDeveloper",
     validator: AssignDeveloperDTO,
   },
+  {
+    method: "delete",
+    route: "/project/:uuid/developers/:developerUuid",
+    controller: ProjectController,
+    action: "unassignDeveloper",
+    validator: null,
+  },
 ];
