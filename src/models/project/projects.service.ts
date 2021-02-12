@@ -56,10 +56,8 @@ export class ProjectsService {
   }
 
   async update(next, uuid: string, project: ProjectDTO): Promise<SuccessResponse> {
-    const currentProject = await this.projectRepository.get(next, { uuid }, [], true);
     const similarProject = await this.projectRepository.get(next, { name: project.name });
-
-    if (similarProject && similarProject.uuid !== currentProject.uuid) {
+    if (similarProject && similarProject.uuid !== uuid) {
       return next(new createHttpError.BadRequest("Project with this name already exists."));
     }
 
