@@ -2,6 +2,8 @@ import * as createHttpError from "http-errors";
 
 import { SuccessResponse } from "../../types/common-types";
 
+import { ProjectsService } from "../project/projects.service";
+
 import { DeveloperRepository } from "./repositories/developer.repository";
 import { Developer } from "./entities/developer.entity";
 import { DeveloperDTO } from "./validators/developer.validator";
@@ -9,6 +11,8 @@ import { DeveloperSerializer } from "./serializers/developer.serializer";
 
 export class DeveloperService {
   private developerRepository = new DeveloperRepository(Developer);
+
+  private projectService = new ProjectsService();
 
   async create(next, developer: DeveloperDTO): Promise<{ developer: DeveloperSerializer }> {
     const developerFromDB = await this.developerRepository.get(next, { email: developer.email });
@@ -33,6 +37,13 @@ export class DeveloperService {
   }
 
   async delete(next, uuid: string): Promise<SuccessResponse> {
+    const developer = await this.developerRepository.get(next, { uuid }, ["features"], true, true);
+    if (!developer) {
+      return;
+    }
+
+    await this.projectService.unassignDeveloperFromFeatures(next, developer.features);
+
     return await this.developerRepository.deleteEntity(next, { uuid });
   }
 }

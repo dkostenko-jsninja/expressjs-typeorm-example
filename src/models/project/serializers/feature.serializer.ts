@@ -1,5 +1,7 @@
 import { Exclude } from "class-transformer";
 
+import { Developer } from "../../developer/entities/developer.entity";
+
 import { Feature } from "../entities/feature.entity";
 import { Project } from "../entities/project.entity";
 
@@ -13,14 +15,15 @@ export class FeatureSerializer implements Feature {
 
   description: string;
 
-  @Exclude()
   expirationDate: string;
 
-  @Exclude()
   developerUuid: string;
 
   @Exclude()
   project: Project;
+
+  @Exclude()
+  developer: Developer;
 
   @Exclude()
   createdAt: Date;

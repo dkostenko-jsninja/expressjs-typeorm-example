@@ -8,6 +8,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Developer } from "../../developer/entities/developer.entity";
+
 import { IFeature } from "../interfaces/feature.interface";
 
 import { Project } from "./project.entity";
@@ -35,6 +37,9 @@ export class Feature implements IFeature {
 
   @ManyToOne((type) => Project, (project) => project.features, { onDelete: "CASCADE" })
   project: Project;
+
+  @ManyToOne((type) => Developer, (developer) => developer.features)
+  developer: Developer;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;

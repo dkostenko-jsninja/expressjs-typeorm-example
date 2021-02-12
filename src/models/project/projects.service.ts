@@ -84,7 +84,21 @@ export class ProjectsService {
       return next(new createHttpError.BadRequest("Feature with this name already exists."));
     }
 
-    const featureEntity = this.featureRepository.create({ ...feature, project });
+    let developer = null;
+    if (feature.developerUuid) {
+      developer = await this.getDeveloperForFeature(next, feature.developerUuid, uuid, null);
+    }
+
+    if (!developer && feature.developerUuid) {
+      return;
+    }
+
+    const featureEntity = this.featureRepository.create({
+      ...feature,
+      project,
+      developer,
+      expirationDate: developer ? this.customDate.currentDate() : null,
+    });
 
     const newFeature = await this.featureRepository.createEntity(next, featureEntity);
 
@@ -113,7 +127,24 @@ export class ProjectsService {
       return next(new createHttpError.BadRequest("Feature with this name already exists."));
     }
 
-    return await this.featureRepository.updateEntity(next, { uuid: featureUuid }, feature);
+    let developer = null;
+    if (feature.developerUuid) {
+      developer = await this.getDeveloperForFeature(next, feature.developerUuid, uuid, featureUuid);
+    }
+
+    if (!developer && feature.developerUuid) {
+      return;
+    }
+
+    return await this.featureRepository.updateEntity(
+      next,
+      { uuid: featureUuid },
+      {
+        ...feature,
+        developer,
+        expirationDate: developer ? this.customDate.currentDate() : null,
+      }
+    );
   }
 
   async deleteFeature(next, uuid: string, featureUuid: string): Promise<SuccessResponse> {
@@ -188,7 +219,7 @@ export class ProjectsService {
     const developer = await this.developerRepository.get(
       next,
       { uuid: developerUuid },
-      [],
+      ["features", "features.project"],
       true,
       true
     );
@@ -197,8 +228,80 @@ export class ProjectsService {
       return;
     }
 
+    const developersFeatures = developer.features.filter((feature) => {
+      return feature.project.uuid === project.uuid;
+    });
+
+    await this.unassignDeveloperFromFeatures(next, developersFeatures);
+
     await this.developerProjectRepository.deleteEntity(next, { developer, project });
 
     return successResponse;
+  }
+
+  async unassignDeveloperFromFeatures(next, features: Feature[]): Promise<void> {
+    for (const feature of features) {
+      let expirationDate = null;
+      if (this.customDate.daysBetween(feature.expirationDate, this.customDate.currentDate())) {
+        expirationDate = feature.expirationDate;
+      }
+
+      await this.featureRepository.updateEntity(
+        next,
+        { uuid: feature.uuid },
+        { developer: null, expirationDate, developerUuid: null }
+      );
+    }
+  }
+
+  private async getDeveloperForFeature(
+    next,
+    developerUuid: string,
+    projectUuid: string,
+    featureUuid: string
+  ): Promise<Developer> {
+    const developer = await this.developerRepository.get(
+      next,
+      { uuid: developerUuid },
+      ["features", "developerProjects", "developerProjects.project"],
+      true,
+      true
+    );
+
+    if (!developer) {
+      return;
+    }
+
+    const isAssignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
+      return developerProject.project.uuid === projectUuid;
+    });
+
+    if (isAssignedProjectIndex === -1) {
+      return next(
+        new createHttpError.BadRequest(`This developer is not assigned to this project.`)
+      );
+    }
+
+    const todaysFeatures = developer.features.filter((feature) => {
+      return (
+        this.customDate.daysBetween(feature.expirationDate, this.customDate.currentDate()) === 0 &&
+        feature.uuid !== featureUuid
+      );
+    });
+
+    if (
+      (developer.level === DeveloperLevels.SENIOR && todaysFeatures.length <= 1) ||
+      (developer.level === DeveloperLevels.JUNIOR && !todaysFeatures.length)
+    ) {
+      return developer;
+    }
+
+    const featureNames = todaysFeatures.map((feature) => feature.name).join(" and ");
+
+    next(
+      new createHttpError.BadRequest(
+        `This developer already has ${featureNames} in today's task list. You can perform this operation tomorrow.`
+      )
+    );
   }
 }
