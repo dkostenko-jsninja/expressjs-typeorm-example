@@ -175,15 +175,14 @@ export class ProjectsService {
     }
 
     const developerProjectsAmount = developer.developerProjects.length;
-    const isAlreadyAssigned =
-      developer.developerProjects.findIndex((developerProject) => {
-        return developerProject.project.uuid === project.uuid;
-      }) !== -1;
+    const assignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
+      return developerProject.project.uuid === project.uuid;
+    });
 
     if (
       (developer.level === DeveloperLevels.SENIOR && developerProjectsAmount >= 2) ||
       (developer.level === DeveloperLevels.JUNIOR && developerProjectsAmount >= 1) ||
-      isAlreadyAssigned
+      assignedProjectIndex !== -1
     ) {
       const projectNames = developer.developerProjects
         .map((project) => project.project.name)
@@ -272,11 +271,11 @@ export class ProjectsService {
       return;
     }
 
-    const isAssignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
+    const assignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
       return developerProject.project.uuid === projectUuid;
     });
 
-    if (isAssignedProjectIndex === -1) {
+    if (assignedProjectIndex === -1) {
       return next(
         new createHttpError.BadRequest(`This developer is not assigned to this project.`)
       );
