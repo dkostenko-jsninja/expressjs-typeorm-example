@@ -1,8 +1,13 @@
 import * as createHttpError from "http-errors";
 
 import { SuccessResponse } from "../../types/common-types";
+import { successResponse } from "../../constants/success-response";
 
 import { CustomDate } from "../custom-date";
+
+import { DeveloperRepository } from "../developer/repositories/developer.repository";
+import { Developer } from "../developer/entities/developer.entity";
+import { DeveloperLevels } from "../developer/interfaces/developer.interface";
 
 import { ProjectRepository } from "./repositories/project.repository";
 import { Project } from "./entities/project.entity";
@@ -14,9 +19,15 @@ import { FeatureRepository } from "./repositories/feature.repository";
 import { Feature } from "./entities/feature.entity";
 import { FeatureSerializer } from "./serializers/feature.serializer";
 
+import { DeveloperProject } from "./entities/developer-project.entity";
+import { AssignDeveloperDTO } from "./validators/assign-developer.validator";
+import { DeveloperProjectRepository } from "./repositories/developer-project.repository";
+
 export class ProjectsService {
   private projectRepository = new ProjectRepository(Project);
   private featureRepository = new FeatureRepository(Feature);
+  private developerRepository = new DeveloperRepository(Developer);
+  private developerProjectRepository = new DeveloperProjectRepository(DeveloperProject);
 
   private customDate = new CustomDate();
 
@@ -36,7 +47,11 @@ export class ProjectsService {
   }
 
   async getAll(next): Promise<{ projects: ProjectSerializer[] }> {
-    const projects = await this.projectRepository.getAll(next, {}, ["features"]);
+    const projects = await this.projectRepository.getAll(next, {}, [
+      "features",
+      "team",
+      "team.developer",
+    ]);
     return { projects };
   }
 
@@ -108,5 +123,63 @@ export class ProjectsService {
     }
 
     return await this.featureRepository.deleteEntity(next, { uuid: featureUuid });
+  }
+
+  async assignDeveloper(
+    next,
+    uuid: string,
+    assignDeveloper: AssignDeveloperDTO
+  ): Promise<SuccessResponse> {
+    const project = await this.projectRepository.get(next, { uuid }, [], true, true);
+    const developer = await this.developerRepository.get(
+      next,
+      { uuid: assignDeveloper.developerUuid },
+      ["developerProjects", "developerProjects.project"],
+      true,
+      true
+    );
+
+    if (!project || !developer) {
+      return;
+    }
+
+    const developerProjectsAmount = developer.developerProjects.length;
+    const isAlreadyAssigned =
+      developer.developerProjects.findIndex((developerProject) => {
+        return developerProject.project.uuid === project.uuid;
+      }) !== -1;
+
+    if (
+      (developer.level === DeveloperLevels.SENIOR && developerProjectsAmount >= 2) ||
+      (developer.level === DeveloperLevels.JUNIOR && developerProjectsAmount >= 1) ||
+      isAlreadyAssigned
+    ) {
+      const projectNames = developer.developerProjects
+        .map((project) => project.project.name)
+        .join(" and ");
+
+      return next(
+        new createHttpError.BadRequest(`This developer is already assigned to ${projectNames}.`)
+      );
+    }
+
+    await this.developerProjectRepository.saveEntity(next, { developer, project });
+
+    if (developer.level === DeveloperLevels.SENIOR && developerProjectsAmount >= 1) {
+      const developerProjects = developer.developerProjects.map((developerProject) => {
+        return developerProject.project;
+      });
+      developerProjects.push(project);
+
+      for (const developerProject of developerProjects) {
+        await this.projectRepository.updateEntity(
+          next,
+          { uuid: developerProject.uuid },
+          { expirationDate: this.customDate.addDays(10) }
+        );
+      }
+    }
+
+    return successResponse;
   }
 }

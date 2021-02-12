@@ -41,4 +41,8 @@ export class ProjectController {
       request.params.featureUuid
     );
   }
+
+  async assignDeveloper(request: Request, response: Response, next: NextFunction) {
+    return await this.projectService.assignDeveloper(next, request.params.uuid, request.body);
+  }
 }

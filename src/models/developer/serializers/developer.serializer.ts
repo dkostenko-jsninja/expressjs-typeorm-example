@@ -1,5 +1,7 @@
 import { Exclude } from "class-transformer";
 
+import { DeveloperProject } from "../../project/entities/developer-project.entity";
+
 import { Developer } from "../entities/developer.entity";
 
 export class DeveloperSerializer implements Developer {
@@ -19,6 +21,9 @@ export class DeveloperSerializer implements Developer {
   level: string;
 
   employeeStatus: string;
+
+  @Exclude()
+  developerProjects: DeveloperProject[];
 
   @Exclude()
   createdAt: Date;

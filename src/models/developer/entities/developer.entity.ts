@@ -3,9 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+
+import { DeveloperProject } from "../../project/entities/developer-project.entity";
 
 import { DeveloperLevels, EmployeeStatus, IDeveloper } from "../interfaces/developer.interface";
 
@@ -43,6 +46,9 @@ export class Developer implements IDeveloper {
     default: EmployeeStatus.ACTIVE,
   })
   employeeStatus: string;
+
+  @OneToMany((type) => DeveloperProject, (developerProject) => developerProject.developer)
+  developerProjects: DeveloperProject[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;

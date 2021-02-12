@@ -1,6 +1,7 @@
 import { ProjectController } from "./project.controller";
 import { ProjectDTO } from "./validators/project.validator";
 import { FeatureDTO } from "./validators/feature.validator";
+import { AssignDeveloperDTO } from "./validators/assign-developer.validator";
 
 export const ProjectRouter = [
   {
@@ -51,5 +52,12 @@ export const ProjectRouter = [
     controller: ProjectController,
     action: "deleteFeature",
     validator: null,
+  },
+  {
+    method: "post",
+    route: "/project/:uuid/developers",
+    controller: ProjectController,
+    action: "assignDeveloper",
+    validator: AssignDeveloperDTO,
   },
 ];

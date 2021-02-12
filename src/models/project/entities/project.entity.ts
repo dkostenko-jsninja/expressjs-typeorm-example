@@ -11,6 +11,7 @@ import {
 import { IProject } from "../interfaces/project.interface";
 
 import { Feature } from "./feature.entity";
+import { DeveloperProject } from "./developer-project.entity";
 
 @Entity({ name: "project" })
 export class Project implements IProject {
@@ -32,6 +33,9 @@ export class Project implements IProject {
 
   @OneToMany((type) => Feature, (feature) => feature.project)
   features: Feature[];
+
+  @OneToMany((type) => DeveloperProject, (developerProject) => developerProject.project)
+  team: DeveloperProject[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt: Date;

@@ -64,6 +64,13 @@ export class ModelRepository<T, K extends ModelSerializer> {
       .catch(next);
   }
 
+  async saveEntity(next, entity: DeepPartial<T>): Promise<SuccessResponse> {
+    return this.repository
+      .save(entity)
+      .then(() => successResponse)
+      .catch(next);
+  }
+
   async updateEntity(
     next,
     options: { [key: string]: any },
