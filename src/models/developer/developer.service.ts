@@ -33,6 +33,13 @@ export class DeveloperService {
   }
 
   async edit(next, uuid: string, developer: DeveloperDTO): Promise<SuccessResponse> {
+    const similarDeveloper = await this.developerRepository.get(next, { email: developer.email });
+    if (similarDeveloper && similarDeveloper.uuid !== uuid) {
+      return next(
+        new createHttpError.BadRequest("Developer with this email address already exists.")
+      );
+    }
+
     return await this.developerRepository.updateEntity(next, { uuid }, developer);
   }
 
