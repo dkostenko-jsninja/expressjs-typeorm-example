@@ -3,7 +3,7 @@ import { ProjectDTO } from "./validators/project.validator";
 import { FeatureDTO } from "./validators/feature.validator";
 import { AssignDeveloperDTO } from "./validators/assign-developer.validator";
 
-export const ProjectRouter = [
+export const ProjectRoutes = [
   {
     method: "post",
     route: "/project",
