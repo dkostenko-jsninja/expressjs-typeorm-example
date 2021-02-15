@@ -18,7 +18,7 @@ export class DeveloperService {
     const developerFromDB = await this.developerRepository.get(next, { email: developer.email });
     if (developerFromDB) {
       return next(
-        new createHttpError.BadRequest(`Developer with this email address already exists.`)
+        new createHttpError.BadRequest("Developer with this email address already exists.")
       );
     }
 
