@@ -4,6 +4,7 @@ import { createConnection } from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
+import * as cors from "cors";
 import { Routes } from "./routes";
 
 dotenv.config();
@@ -16,6 +17,7 @@ import { validateBody, validationError } from "./validate";
 createConnection(mysqlConfig)
   .then(async () => {
     const app = express();
+    app.use(cors());
     app.use(bodyParser.json());
 
     // register express routes from defined application routes
