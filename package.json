@@ -24,7 +24,7 @@
     "express": "^4.15.4",
     "http-errors": "^1.8.0",
     "mysql": "^2.14.1",
-    "typeorm": "0.2.30"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@types/http-errors": "^1.8.0",

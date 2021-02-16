@@ -5,12 +5,15 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import { Request, Response } from "express";
 import * as cors from "cors";
+import * as swaggerUi from "swagger-ui-express";
 import { Routes } from "./routes";
 
 dotenv.config();
 
 import mysqlConfig from "./config/database/mysql/config";
 import appConfig from "./config/app/config";
+
+import * as openapiDoc from "./docs/openapi-doc.json";
 
 import { validateBody, validationError } from "./validate";
 
@@ -58,6 +61,8 @@ createConnection(mysqlConfig)
         message: errorStatus === 500 ? "Internal server error" : error.message,
       });
     });
+
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
 
     app.listen(appConfig.port);
 
