@@ -15,6 +15,9 @@ const mysqlConfig: MysqlConnectionOptions = {
   cli: {
     migrationsDir: "src/database/migrations",
   },
+  extra: {
+    socketPath: process.env.DATABASE_SOCKET_PATH,
+  },
 };
 
 export default mysqlConfig;

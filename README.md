@@ -23,3 +23,17 @@ After that, you can start the server by running the following command
 ```bash
 $ npm start
 ```
+
+## Deployment
+
+Firstly, you need to run
+
+```bash
+$ gcloud init
+```
+
+Then, you can deploy the app to Google App Engine by running
+
+```bash
+$ gcloud app deploy
+```
