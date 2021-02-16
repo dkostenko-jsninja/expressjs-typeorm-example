@@ -1,0 +1,550 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Projects dashboard API",
+    "description": "API for Projects dashboard",
+    "version": "1.0.1"
+  },
+  "tags": [
+    {
+      "name": "developers",
+      "description": "Everything to do with developers"
+    },
+    {
+      "name": "projects",
+      "description": "Everything to do with project"
+    },
+    {
+      "name": "features",
+      "description": "Everything to do with project features"
+    }
+  ],
+  "paths": {
+    "/api/developers": {
+      "get": {
+        "tags": ["developers"],
+        "summary": "Get all developers.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/developer": {
+      "post": {
+        "tags": ["developers"],
+        "summary": "Add a new developer",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Developer"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/developer/{uuid}": {
+      "put": {
+        "tags": ["developers"],
+        "summary": "Edit developer's info",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Developer"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["developers"],
+        "summary": "Delete developer",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "get": {
+        "tags": ["projects"],
+        "summary": "Get all projects.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project": {
+      "post": {
+        "tags": ["projects"],
+        "summary": "Add a new project",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Project"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project/{uuid}": {
+      "put": {
+        "tags": ["projects"],
+        "summary": "Edit projects's info",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Project"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["projects"],
+        "summary": "Delete project",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project/{uuid}/developers": {
+      "post": {
+        "tags": ["projects"],
+        "summary": "Assign developer to the project",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Developer uuid",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project/{uuid}/developers/{developerUuid}": {
+      "delete": {
+        "tags": ["projects"],
+        "summary": "Remove developer from the project",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "developerUuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project/{uuid}/feature": {
+      "post": {
+        "tags": ["features"],
+        "summary": "Add a new feature",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Feature"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/api/project/{uuid}/feature/{featureUuid}": {
+      "put": {
+        "tags": ["features"],
+        "summary": "Edit feature details",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "featureUuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Feature"
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["features"],
+        "summary": "Delete feature",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "featureUuid",
+            "in": "path",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Developer": {
+        "type": "object",
+        "properties": {
+          "developer": {
+            "$ref": "#/components/schemas/Developer_developer"
+          }
+        }
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "$ref": "#/components/schemas/Project_project"
+          }
+        }
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "feature": {
+            "$ref": "#/components/schemas/Feature_feature"
+          }
+        }
+      },
+      "body": {
+        "type": "object",
+        "properties": {
+          "developerUuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "Developer_developer": {
+        "required": ["email", "firstName", "lastName"],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "photo": {
+            "type": "string",
+            "format": "url"
+          },
+          "email": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string",
+            "format": "enum('junior', 'senior')"
+          },
+          "employeeStatus": {
+            "type": "string",
+            "format": "enum('active', 'inactive')"
+          }
+        }
+      },
+      "Project_project": {
+        "required": ["description", "expirationDate", "name"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "url"
+          },
+          "expirationDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Feature_feature": {
+        "required": ["description", "name"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "developerUuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "Developer": {
+        "description": "Developer object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Developer"
+            }
+          }
+        },
+        "required": true
+      },
+      "Project": {
+        "description": "Project object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Project"
+            }
+          }
+        },
+        "required": true
+      },
+      "Feature": {
+        "description": "Project feature object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Feature"
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  }
+}
