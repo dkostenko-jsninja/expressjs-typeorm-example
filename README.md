@@ -1,5 +1,9 @@
 # Projects dashboard API
 
+This project is an example of using TypeORM with Express.js.
+
+The source code of the front-end part can be found by following the link: https://github.com/dkostenko-jsninja/projects-dashboard-web-app
+
 ## Installation
 
 Firstly you need to install node_modules by running this command
