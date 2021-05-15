@@ -40,7 +40,7 @@ export class DeveloperService {
       );
     }
 
-    return await this.developerRepository.updateEntity(next, { uuid }, developer);
+    return this.developerRepository.updateEntity(next, { uuid }, developer);
   }
 
   async delete(next, uuid: string): Promise<SuccessResponse> {
@@ -51,6 +51,6 @@ export class DeveloperService {
 
     await this.projectService.unassignDeveloperFromFeatures(next, developer.features);
 
-    return await this.developerRepository.deleteEntity(next, { uuid });
+    return this.developerRepository.deleteEntity(next, { uuid });
   }
 }

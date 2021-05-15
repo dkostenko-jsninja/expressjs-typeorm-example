@@ -62,11 +62,11 @@ export class ProjectsService {
       return next(new createHttpError.BadRequest("Project with this name already exists."));
     }
 
-    return await this.projectRepository.updateEntity(next, { uuid }, project);
+    return this.projectRepository.updateEntity(next, { uuid }, project);
   }
 
-  async delete(next, uuid: string): Promise<SuccessResponse> {
-    return await this.projectRepository.deleteEntity(next, { uuid });
+  delete(next, uuid: string): Promise<SuccessResponse> {
+    return this.projectRepository.deleteEntity(next, { uuid });
   }
 
   async createFeature(
@@ -136,7 +136,7 @@ export class ProjectsService {
       return;
     }
 
-    return await this.featureRepository.updateEntity(
+    return this.featureRepository.updateEntity(
       next,
       { uuid: featureUuid },
       {
@@ -153,7 +153,7 @@ export class ProjectsService {
       return;
     }
 
-    return await this.featureRepository.deleteEntity(next, { uuid: featureUuid });
+    return this.featureRepository.deleteEntity(next, { uuid: featureUuid });
   }
 
   async assignDeveloper(
@@ -233,9 +233,7 @@ export class ProjectsService {
 
     await this.unassignDeveloperFromFeatures(next, developersFeatures);
 
-    await this.developerProjectRepository.deleteEntity(next, { developer, project });
-
-    return successResponse;
+    return this.developerProjectRepository.deleteEntity(next, { developer, project });
   }
 
   async unassignDeveloperFromFeatures(next, features: Feature[]): Promise<void> {

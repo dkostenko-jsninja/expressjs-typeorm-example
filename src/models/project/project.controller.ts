@@ -5,28 +5,28 @@ import { ProjectsService } from "./projects.service";
 export class ProjectController {
   private projectService = new ProjectsService();
 
-  async create(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.create(next, request.body);
+  create(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.create(next, request.body);
   }
 
-  async getAll(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.getAll(next);
+  getAll(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.getAll(next);
   }
 
-  async update(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.update(next, request.params.uuid, request.body);
+  update(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.update(next, request.params.uuid, request.body);
   }
 
-  async delete(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.delete(next, request.params.uuid);
+  delete(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.delete(next, request.params.uuid);
   }
 
-  async createFeature(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.createFeature(next, request.params.uuid, request.body);
+  createFeature(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.createFeature(next, request.params.uuid, request.body);
   }
 
-  async updateFeature(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.updateFeature(
+  updateFeature(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.updateFeature(
       next,
       request.params.uuid,
       request.body,
@@ -34,20 +34,16 @@ export class ProjectController {
     );
   }
 
-  async deleteFeature(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.deleteFeature(
-      next,
-      request.params.uuid,
-      request.params.featureUuid
-    );
+  deleteFeature(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.deleteFeature(next, request.params.uuid, request.params.featureUuid);
   }
 
-  async assignDeveloper(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.assignDeveloper(next, request.params.uuid, request.body);
+  assignDeveloper(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.assignDeveloper(next, request.params.uuid, request.body);
   }
 
-  async unassignDeveloper(request: Request, response: Response, next: NextFunction) {
-    return await this.projectService.unassignDeveloper(
+  unassignDeveloper(request: Request, response: Response, next: NextFunction) {
+    return this.projectService.unassignDeveloper(
       next,
       request.params.uuid,
       request.params.developerUuid
