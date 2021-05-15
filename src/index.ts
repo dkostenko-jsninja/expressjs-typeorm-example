@@ -39,6 +39,7 @@ createConnection(mysqlConfig)
         },
       ];
 
+      // add validation middleware if the route requires DTO validation
       if (route.validator) {
         args.splice(1, 0, validateBody(route.validator));
       }
@@ -46,8 +47,10 @@ createConnection(mysqlConfig)
       (app as any)[route.method](...args);
     });
 
+    // add validationError middleware for handling DTO validation errors
     app.use(validationError);
 
+    // add error handling middleware
     app.use((error, req, res, next) => {
       const errorStatus = error.status || 500;
 

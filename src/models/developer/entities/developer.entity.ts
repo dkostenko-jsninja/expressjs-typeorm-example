@@ -1,12 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Generated,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, Generated, OneToMany } from "typeorm";
+
+import { CommonEntity } from "../../../common/entities/common.entity";
 
 import { DeveloperProject } from "../../project/entities/developer-project.entity";
 import { Feature } from "../../project/entities/feature.entity";
@@ -14,10 +8,7 @@ import { Feature } from "../../project/entities/feature.entity";
 import { DeveloperLevels, EmployeeStatus, IDeveloper } from "../interfaces/developer.interface";
 
 @Entity({ name: "developer" })
-export class Developer implements IDeveloper {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Developer extends CommonEntity implements IDeveloper {
   @Column({ unique: true, type: "varchar", length: 36 })
   @Generated("uuid")
   uuid: string;
@@ -53,10 +44,4 @@ export class Developer implements IDeveloper {
 
   @OneToMany((type) => Feature, (feature) => feature.developer)
   features: Feature[];
-
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
-  updatedAt: Date;
 }

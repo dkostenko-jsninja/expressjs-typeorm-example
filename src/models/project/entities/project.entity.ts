@@ -1,12 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Generated,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, Generated, OneToMany } from "typeorm";
+
+import { CommonEntity } from "../../../common/entities/common.entity";
 
 import { IProject } from "../interfaces/project.interface";
 
@@ -14,10 +8,7 @@ import { Feature } from "./feature.entity";
 import { DeveloperProject } from "./developer-project.entity";
 
 @Entity({ name: "project" })
-export class Project implements IProject {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Project extends CommonEntity implements IProject {
   @Column({ unique: true, type: "varchar", length: 36 })
   @Generated("uuid")
   uuid: string;
@@ -36,10 +27,4 @@ export class Project implements IProject {
 
   @OneToMany((type) => DeveloperProject, (developerProject) => developerProject.project)
   team: DeveloperProject[];
-
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
-  updatedAt: Date;
 }

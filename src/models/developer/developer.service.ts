@@ -4,9 +4,9 @@ import { SuccessResponse } from "../../common/types/common-types";
 
 import { ProjectsService } from "../project/projects.service";
 
-import { DeveloperRepository } from "./repositories/developer.repository";
 import { Developer } from "./entities/developer.entity";
 import { DeveloperDTO } from "./validators/developer.validator";
+import { DeveloperRepository } from "./repositories/developer.repository";
 import { DeveloperSerializer } from "./serializers/developer.serializer";
 
 export class DeveloperService {
@@ -40,7 +40,7 @@ export class DeveloperService {
       );
     }
 
-    return await this.developerRepository.updateEntity(next, { uuid }, developer);
+    return this.developerRepository.updateEntity(next, { uuid }, developer);
   }
 
   async delete(next, uuid: string): Promise<SuccessResponse> {
@@ -51,6 +51,6 @@ export class DeveloperService {
 
     await this.projectService.unassignDeveloperFromFeatures(next, developer.features);
 
-    return await this.developerRepository.deleteEntity(next, { uuid });
+    return this.developerRepository.deleteEntity(next, { uuid });
   }
 }

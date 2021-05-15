@@ -1,4 +1,6 @@
-import { classToPlain, Exclude, plainToClass, Transform } from "class-transformer";
+import { classToPlain, plainToClass, Transform } from "class-transformer";
+
+import { CommonSerializer } from "../../../common/serializers/common.serializer";
 
 import { DeveloperSerializer } from "../../developer/serializers/developer.serializer";
 
@@ -8,10 +10,7 @@ import { DeveloperProject } from "../entities/developer-project.entity";
 
 import { FeatureSerializer } from "./feature.serializer";
 
-export class ProjectSerializer implements Project {
-  @Exclude()
-  id: number;
-
+export class ProjectSerializer extends CommonSerializer implements Project {
   uuid: string;
 
   name: string;
@@ -20,21 +19,15 @@ export class ProjectSerializer implements Project {
 
   expirationDate: string;
 
-  @Transform((features) => {
-    return features.value.map((feature) => plainToClass(FeatureSerializer, classToPlain(feature)));
-  })
+  @Transform((features) =>
+    features.value.map((feature) => plainToClass(FeatureSerializer, classToPlain(feature)))
+  )
   features: Feature[];
 
-  @Transform((team) => {
-    return team.value.map((developerProject) => {
-      return plainToClass(DeveloperSerializer, classToPlain(developerProject.developer));
-    });
-  })
+  @Transform((team) =>
+    team.value.map((developerProject) =>
+      plainToClass(DeveloperSerializer, classToPlain(developerProject.developer))
+    )
+  )
   team: DeveloperProject[];
-
-  @Exclude()
-  createdAt: Date;
-
-  @Exclude()
-  updatedAt: Date;
 }

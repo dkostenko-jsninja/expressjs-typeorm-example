@@ -1,6 +1,7 @@
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 import { Developer } from "../../developer/entities/developer.entity";
+
 import { Project } from "./project.entity";
 
 @Entity({ name: "developerProject" })
