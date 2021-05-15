@@ -9,7 +9,7 @@ const validationOptions = {
   transform: false,
 };
 
-export function validateBody<T>(Type): express.RequestHandler {
+export function validateBody(Type): express.RequestHandler {
   return async (req, res, next) => {
     const input = new Type(req.body);
 
@@ -26,9 +26,7 @@ export function validateBody<T>(Type): express.RequestHandler {
 export function validationError(errors: Error, req, res, next) {
   if (errors instanceof Array && errors[0] instanceof ValidationError) {
     const validationErrors = errors
-      .map((err) => {
-        return Object.keys(err.constraints).map((key) => err.constraints[key]);
-      })
+      .map((err) => Object.keys(err.constraints).map((key) => err.constraints[key]))
       .reduce((accumulator, currentValue) => accumulator.concat(currentValue));
 
     const errorResponse = {

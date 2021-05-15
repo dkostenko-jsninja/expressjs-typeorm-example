@@ -20,16 +20,16 @@ export class ProjectSerializer implements Project {
 
   expirationDate: string;
 
-  @Transform((features) => {
-    return features.value.map((feature) => plainToClass(FeatureSerializer, classToPlain(feature)));
-  })
+  @Transform((features) =>
+    features.value.map((feature) => plainToClass(FeatureSerializer, classToPlain(feature)))
+  )
   features: Feature[];
 
-  @Transform((team) => {
-    return team.value.map((developerProject) => {
-      return plainToClass(DeveloperSerializer, classToPlain(developerProject.developer));
-    });
-  })
+  @Transform((team) =>
+    team.value.map((developerProject) =>
+      plainToClass(DeveloperSerializer, classToPlain(developerProject.developer))
+    )
+  )
   team: DeveloperProject[];
 
   @Exclude()

@@ -5,23 +5,24 @@ import { successResponse } from "../../common/constants/success-response";
 
 import { CustomDate } from "../custom-date";
 
-import { DeveloperRepository } from "../developer/repositories/developer.repository";
 import { Developer } from "../developer/entities/developer.entity";
 import { DeveloperLevels } from "../developer/interfaces/developer.interface";
+import { DeveloperRepository } from "../developer/repositories/developer.repository";
 
-import { ProjectRepository } from "./repositories/project.repository";
 import { Project } from "./entities/project.entity";
-import { ProjectSerializer } from "./serializers/project.serializer";
 import { ProjectDTO } from "./validators/project.validator";
+import { ProjectRepository } from "./repositories/project.repository";
+import { ProjectSerializer } from "./serializers/project.serializer";
 
+import { Feature } from "./entities/feature.entity";
 import { FeatureDTO } from "./validators/feature.validator";
 import { FeatureRepository } from "./repositories/feature.repository";
-import { Feature } from "./entities/feature.entity";
 import { FeatureSerializer } from "./serializers/feature.serializer";
 
 import { DeveloperProject } from "./entities/developer-project.entity";
-import { AssignDeveloperDTO } from "./validators/assign-developer.validator";
 import { DeveloperProjectRepository } from "./repositories/developer-project.repository";
+
+import { AssignDeveloperDTO } from "./validators/assign-developer.validator";
 
 export class ProjectsService {
   private projectRepository = new ProjectRepository(Project);
@@ -118,9 +119,10 @@ export class ProjectsService {
       return next(new createHttpError.NotFound("Feature was not found."));
     }
 
-    const availableFeature = project.features.find((projectFeature) => {
-      return projectFeature.name === feature.name && projectFeature.uuid !== featureUuid;
-    });
+    const availableFeature = project.features.find(
+      (projectFeature) =>
+        projectFeature.name === feature.name && projectFeature.uuid !== featureUuid
+    );
     if (availableFeature) {
       return next(new createHttpError.BadRequest("Feature with this name already exists."));
     }
@@ -173,9 +175,9 @@ export class ProjectsService {
     }
 
     const developerProjectsAmount = developer.developerProjects.length;
-    const assignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
-      return developerProject.project.uuid === project.uuid;
-    });
+    const assignedProjectIndex = developer.developerProjects.findIndex(
+      (developerProject) => developerProject.project.uuid === project.uuid
+    );
 
     if (
       (developer.level === DeveloperLevels.SENIOR && developerProjectsAmount >= 2) ||
@@ -194,9 +196,9 @@ export class ProjectsService {
     await this.developerProjectRepository.saveEntity(next, { developer, project });
 
     if (developer.level === DeveloperLevels.SENIOR && developerProjectsAmount >= 1) {
-      const developerProjects = developer.developerProjects.map((developerProject) => {
-        return developerProject.project;
-      });
+      const developerProjects = developer.developerProjects.map(
+        (developerProject) => developerProject.project
+      );
       developerProjects.push(project);
 
       for (const developerProject of developerProjects) {
@@ -225,9 +227,9 @@ export class ProjectsService {
       return;
     }
 
-    const developersFeatures = developer.features.filter((feature) => {
-      return feature.project.uuid === project.uuid;
-    });
+    const developersFeatures = developer.features.filter(
+      (feature) => feature.project.uuid === project.uuid
+    );
 
     await this.unassignDeveloperFromFeatures(next, developersFeatures);
 
@@ -269,9 +271,9 @@ export class ProjectsService {
       return;
     }
 
-    const assignedProjectIndex = developer.developerProjects.findIndex((developerProject) => {
-      return developerProject.project.uuid === projectUuid;
-    });
+    const assignedProjectIndex = developer.developerProjects.findIndex(
+      (developerProject) => developerProject.project.uuid === projectUuid
+    );
 
     if (assignedProjectIndex === -1) {
       return next(
@@ -279,12 +281,11 @@ export class ProjectsService {
       );
     }
 
-    const todaysFeatures = developer.features.filter((feature) => {
-      return (
+    const todaysFeatures = developer.features.filter(
+      (feature) =>
         this.customDate.daysBetween(feature.expirationDate, this.customDate.currentDate()) === 0 &&
         feature.uuid !== featureUuid
-      );
-    });
+    );
 
     if (
       (developer.level === DeveloperLevels.SENIOR && todaysFeatures.length <= 1) ||

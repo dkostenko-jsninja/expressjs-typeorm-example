@@ -47,9 +47,7 @@ export class ModelRepository<T, K extends ModelSerializer> {
   ): Promise<K[]> {
     return await this.repository
       .find({ where: findOptions, relations })
-      .then((entities) => {
-        return this.transformMany(entities);
-      })
+      .then((entities) => this.transformMany(entities))
       .catch(next);
   }
 
