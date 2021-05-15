@@ -1,12 +1,6 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  Generated,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, Entity, Generated, ManyToOne } from "typeorm";
+
+import { CommonEntity } from "../../../common/entities/common.entity";
 
 import { Developer } from "../../developer/entities/developer.entity";
 
@@ -15,10 +9,7 @@ import { IFeature } from "../interfaces/feature.interface";
 import { Project } from "./project.entity";
 
 @Entity({ name: "feature" })
-export class Feature implements IFeature {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Feature extends CommonEntity implements IFeature {
   @Column({ unique: true, type: "varchar", length: 36 })
   @Generated("uuid")
   uuid: string;
@@ -40,10 +31,4 @@ export class Feature implements IFeature {
 
   @ManyToOne((type) => Developer, (developer) => developer.features)
   developer: Developer;
-
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
-  updatedAt: Date;
 }
